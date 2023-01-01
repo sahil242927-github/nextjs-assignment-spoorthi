@@ -1,12 +1,37 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import { useState } from "react";
 
-const inter = Inter({ subsets: ['latin'] })
+import Card from "../components/card";
+import Container from "../components/common/Container";
+import { productList } from "../data/product-list";
 
-export default function Home() {
-  return (
+export const getStaticProps = async (context) => {
+  return {
+    props: {
+      productList: await productList(),
+    },
+  };
+};
+
+export default function Home({ productList }) {
+  const [numOfCols, setNumOfCols] = useState(0);
+  const [search, setSearch] = useState("");
+
+  const handleColumns = (e) => {
+    setNumOfCols((num) => e.target.value);
+  };
+
+  const handleSearch = (e) => {
+    setSearch((search) => e.target.value);
+  };
+
+  const noOfColsClass = numOfCols
+    ? `sm:grid-cols-${numOfCols} lg:grid-cols-${numOfCols}`
+    : `sm:grid-cols-3 lg:grid-cols-4`;
+
+  return !productList ? (
+    <div>Loading</div>
+  ) : (
     <>
       <Head>
         <title>Create Next App</title>
@@ -14,110 +39,83 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.js</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
-        </div>
+      <main className="flex justify-center items-center w-full">
+        {productList.length > 0 && (
+          <Container>
+            <h1 className="sm:text-center py-4">Product List</h1>
 
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
+            <section className="flex justify-center items-center">
+              <div className="flex justify-between w-full p-5 bg-slate-100 shadow-md mb-3">
+                <div className="w-full sm:w-1/2 flex justify-center">
+                  <div className="relative w-full">
+                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                      <svg
+                        aria-hidden="true"
+                        className="w-5 h-5 text-gray-500 dark:text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        ></path>
+                      </svg>
+                    </div>
+                    <input
+                      type="search"
+                      id="default-search"
+                      class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Search product"
+                      required
+                      onChange={handleSearch}
+                    />
+                  </div>
+                </div>
+                <div className="justify-center hidden sm:flex">
+                  <label
+                    htmlFor="columns"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  ></label>
+                  <select
+                    onChange={handleColumns}
+                    id="columns"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-40 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  >
+                    <option selected>No. of Columns</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                </div>
+              </div>
+            </section>
+            <section className="flex justify-center items-center">
+              <div className={`grid grid-cols-2 ${noOfColsClass} gap-4`}>
+                {productList
+                  .filter((product) =>
+                    search.toLowerCase() === ""
+                      ? product
+                      : product.title.toLowerCase().includes(search)
+                  )
+                  .map(({ title, image, price, id }) => (
+                    <Card
+                      key={id}
+                      title={title}
+                      image={image}
+                      price={price}
+                      link={`/product-details/${id}`}
+                    />
+                  ))}
+              </div>
+            </section>
+          </Container>
+        )}
       </main>
     </>
-  )
+  );
 }
