@@ -12,5 +12,5 @@ Run the following commands to get the repo up and running
 - **Running on localhost:3000 :**
   yarn dev
 
-- **Running test : **
+- **Running test :**
   yarn teat
