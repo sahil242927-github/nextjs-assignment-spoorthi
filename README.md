@@ -2,7 +2,7 @@
 
 ### Prerequisites
 
-Run the commands to get the repo up and running
+Run the following commands to get the repo up and running
 https://github.com/sahil242927-github/nextjs-assignment-spoorthi.git
 
 - **Install dependencies**
