@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState, useTransition } from "react";
+import { useCallback, useMemo, useState, useTransition } from "react";
 
 import Card from "../components/card";
 import Container from "../components/common/Container";
@@ -8,8 +8,6 @@ import ProductList from "../components/product-list";
 import { NoOfColumns } from "../components/filter/noOfColumns";
 import { Search } from "../components/filter/search";
 // import { LoadMoreButton } from "../components/common/LoadMoreButton";
-
-const getInitialProps = async (req, res, query) => {};
 
 export const getStaticProps = async (context) => {
   return {
@@ -24,15 +22,24 @@ export default function Home({ productList }) {
   const [search, setSearch] = useState("");
   const [isPending, startTransition] = useTransition();
 
-  const handleColumns = (e) => {
+  const handleColumns = useCallback((e) => {
     setNumOfCols((num) => e.target.value);
-  };
+  }, []);
 
-  const handleSearch = (e) => {
+  const handleSearch = useCallback((e) => {
     startTransition(() => {
       setSearch((search) => e.target.value);
     });
-  };
+  }, []);
+
+  const NoOfColumnsMemo = useMemo(
+    () => <NoOfColumns handleColumns={handleColumns} />,
+    [handleColumns]
+  );
+  const SearchMemo = useMemo(
+    () => <Search handleSearch={handleSearch} />,
+    [handleSearch]
+  );
 
   // Api doesn't have start param to next number of records
   /* const loadMore = async () => {
@@ -56,8 +63,8 @@ export default function Home({ productList }) {
             <h1 className="sm:text-center py-4">Product List</h1>
             <section className="flex justify-center items-center">
               <div className="flex justify-between w-full p-5 bg-slate-100 shadow-md mb-3">
-                <Search handleSearch={handleSearch} />
-                <NoOfColumns handleColumns={handleColumns} />
+                {SearchMemo}
+                {NoOfColumnsMemo}
               </div>
             </section>
             <ProductList
