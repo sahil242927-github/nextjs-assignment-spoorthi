@@ -17,4 +17,4 @@ Run the following commands to get the repo up and running
   yarn dev
 
 - **Running test :**
-  yarn teat
+  yarn test
