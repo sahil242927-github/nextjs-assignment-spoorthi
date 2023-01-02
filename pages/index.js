@@ -5,6 +5,8 @@ import Card from "../components/card";
 import Container from "../components/common/Container";
 import { productList } from "../data/product-list";
 
+const getInitialProps = async (req, res, query) => {};
+
 export const getStaticProps = async (context) => {
   return {
     props: {
