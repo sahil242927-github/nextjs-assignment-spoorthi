@@ -1,20 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import BackButton from "../../components/common/BackButton";
+
 import { productList as fetchProductList } from "../../data/product-list";
 
 export default function ProductDetails(props) {
-  console.log("props ", props);
   const router = useRouter();
 
   //  this works in the case of fallback:true
-  // if (router.isFallback) return <div>Loading...</div>;
-  const { title, image, price, id } = props?.productDetails;
+  if (router.isFallback) return <div>Loading...</div>;
+  const { title, image, price } = props?.productDetails;
   return (
     <div className="w-full flex justify-center h-screen pt-10">
       <div className="flex flex-col space-y-3">
         <Link href="/" className="font-semibold">
-          Back to Home
+          <BackButton />
         </Link>
         <div>{title}</div>
 
@@ -46,7 +47,6 @@ export default function ProductDetails(props) {
 }
 
 export async function getStaticProps({ params }) {
-  console.log(params);
   const productList = await fetchProductList();
   return {
     props: {
@@ -64,6 +64,6 @@ export async function getStaticPaths() {
   }));
   return {
     paths,
-    fallback: false,
+    fallback: true,
   };
 }
