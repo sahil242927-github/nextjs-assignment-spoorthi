@@ -18,6 +18,6 @@ describe("Product list", () => {
       />
     );
     const listOfProducts = screen.getAllByTestId("product");
-    expect(listOfProducts.length).toBe(3);
+    expect(listOfProducts.length).toBe(20);
   });
 });

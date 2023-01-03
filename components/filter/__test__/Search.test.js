@@ -1,22 +1,35 @@
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { Search } from "../Search";
 import { mockProductList } from "../../../data/mockProductList";
-import Home from "../../../pages";
 
 const mockHandleSearch = jest.fn();
 
 describe("Search Box", () => {
-  it("Should check for seachbox", () => {
+  it("Should render input element", () => {
     render(<Search handleSearch={mockHandleSearch} />);
 
     const searchInput = screen.getByRole("searchbox");
     expect(searchInput).toHaveAccessibleName("Search");
   });
 
-  /*  it("should show search result when search item is not empty", () => {
-    render(<Home ProductList={mockProductList} />);
+  it("Should be able to type in input", () => {
+    render(<Search handleSearch={mockHandleSearch} />);
 
-    const searchbox = screen.getByRole(/Search product/i);
-  }); */
+    const searchInput = screen.getByRole("searchbox");
+    fireEvent.change(searchInput, { target: { value: "bag" } });
+    expect(searchInput.value).toBe("bag");
+  });
+
+  it("Should show filtered products", () => {
+    render(<Search handleSearch={mockHandleSearch} />);
+
+    const searchInput = screen.getByRole("searchbox");
+    fireEvent.change(searchInput, { target: { value: "mens" } });
+
+    const filteredProducts = mockProductList.filter((product) =>
+      product.title.toLowerCase().includes(searchInput.value)
+    );
+
+    expect(filteredProducts.length).toBe(4);
+  });
 });
