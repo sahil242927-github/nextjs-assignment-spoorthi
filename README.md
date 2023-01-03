@@ -1,6 +1,7 @@
 # Nextjs Product list assignment
 
 This assignement is for showing list of products using Nextjs with features search. We are using fakestoreapi for getting the products.
+We also used CSS framework as TailwindCss, and also includes some test cases using React Testing Library and Jest.
 
 ## Running the project
 
