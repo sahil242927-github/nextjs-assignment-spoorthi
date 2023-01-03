@@ -4,8 +4,8 @@ import {
   getAllByTestId,
   findAllByTestId,
 } from "@testing-library/react";
-import ProductList from "./index";
-import { mockProductList } from "../../data/mockProductList";
+import ProductList from "../index";
+import { mockProductList } from "../../../data/mockProductList";
 
 describe("Product list", () => {
   it("should render product list", () => {

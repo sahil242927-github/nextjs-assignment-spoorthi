@@ -1,14 +1,14 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Search } from "./Search";
-import { mockProductList } from "../../data/mockProductList";
-import Home from "../../pages";
+import { Search } from "../Search";
+import { mockProductList } from "../../../data/mockProductList";
+import Home from "../../../pages";
 
-const handleSearch = () => {};
+const mockHandleSearch = jest.fn();
 
 describe("Search Box", () => {
   it("Should check for seachbox", () => {
-    render(<Search handleSearch={handleSearch} />);
+    render(<Search handleSearch={mockHandleSearch} />);
 
     const searchInput = screen.getByRole("searchbox");
     expect(searchInput).toHaveAccessibleName("Search");
